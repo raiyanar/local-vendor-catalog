@@ -4,9 +4,68 @@ const dotenv = require("dotenv");
 const cors = require("cors");
 const Product = require("./models/Product");
 
+// 1. Load environment variables
 dotenv.config();
 
 const app = express();
 
+// 2. Middleware (The guards)
 app.use(cors());
-app.use(express.json());
+app.use(express.json()); // Tells Express to understand JSON data sent by users
+
+// 3. Connect to MongoDB
+mongoose
+  .connect(process.env.MONGO_URI)
+  .then(() => console.log("Connected to MongoDB successfully"))
+  .catch((err) => console.error("Database connection error", err));
+
+// 4. API Routes (Our Waiter Services)
+
+// ROUTE 1: GET ALL PRODUCTS (Read)
+
+app.get("/api/products", async (req, res) => {
+  try {
+    const products = await Product.find().sort({ createdAt: -1 });
+    res.status(200).json(products);
+  } catch (error) {
+    res.status(500).json({ message: "Server error", error: error.message });
+  }
+});
+
+// ROUTE 2: CREATE A PRODUCT (Create)
+app.post("/api/products", async (req, res) => {
+  try {
+    const { title, price, image, category } = req.body;
+    const newProduct = new Product({ title, price, image, category });
+    await newProduct.save();
+    res
+      .status(201)
+      .json({ message: "Product created Successfully!", product: newProduct });
+  } catch (error) {
+    res
+      .status(400)
+      .json({ message: "Validation Failed", error: error.message });
+  }
+});
+
+// ROUTE 3: DELETE A PRODUCT (Delete)
+app.delete("/api/products/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const deletedProduct = await Product.findByIdAndDelete(id);
+    if (!deletedProduct) {
+      return res.status(404).json({ message: "Product not found" });
+    }
+    res.status(200).json({ message: "Product removed from database!" });
+  } catch (error) {
+    res.status(500).json({ message: "Server error", error: error.message });
+  }
+});
+
+// 5. Start Server
+
+const PORT = process.env.PORT || 5000;
+
+app.listen(PORT, () => {
+  console.log(`your app is running perfectly on port ${PORT}`);
+});

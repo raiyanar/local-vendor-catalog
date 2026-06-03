@@ -14,10 +14,7 @@ app.use(cors());
 app.use(express.json()); // Tells Express to understand JSON data sent by users
 
 // 3. Connect to MongoDB
-mongoose
-  .connect(process.env.MONGO_URI)
-  .then(() => console.log("Connected to MongoDB successfully"))
-  .catch((err) => console.error("Database connection error", err));
+// moved to server start
 
 // 4. API Routes (Our Waiter Services)
 
@@ -63,9 +60,15 @@ app.delete("/api/products/:id", async (req, res) => {
 });
 
 // 5. Start Server
+mongoose
+  .connect(process.env.MONGO_URI)
+  .then(() => {
+    console.log("Connected to MongoDB successfully");
 
-const PORT = process.env.PORT || 5000;
-
-app.listen(PORT, () => {
-  console.log(`your app is running perfectly on port ${PORT}`);
-});
+    // Start Server ONLY after database is connected
+    const PORT = process.env.PORT || 5000;
+    app.listen(PORT, () => {
+      console.log(`your app is running perfectly on port ${PORT}`);
+    });
+  })
+  .catch((err) => console.error("Database connection error", err));

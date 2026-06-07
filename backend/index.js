@@ -59,6 +59,24 @@ app.delete("/api/products/:id", async (req, res) => {
   }
 });
 
+// ROUTE 4: UPDATE PRODUCT (Update)
+
+app.put("/api/products/:id", async (req, res) => {
+  try {
+    const { title, price, image, category } = req.body;
+    const updatedProduct = await Product.findByIdAndUpdate(
+      req.params.id,
+      { title, price, image, category },
+      { new: true },
+    );
+    res.status(200).json(updatedProduct);
+  } catch (error) {
+    res
+      .status(500)
+      .json({ message: "failed to update product", error: error.message });
+  }
+});
+
 // 5. Start Server
 mongoose
   .connect(process.env.MONGO_URI)

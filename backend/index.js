@@ -22,7 +22,9 @@ app.use(express.json()); // Tells Express to understand JSON data sent by users
 
 app.get("/api/products", async (req, res) => {
   try {
-    const products = await Product.find().sort({ createdAt: -1 });
+    // Sorting by updatedAt ensures that newly added AND recently edited
+    // products appear at the top for the admin to see immediately.
+    const products = await Product.find().sort({ updatedAt: -1 });
     res.status(200).json(products);
   } catch (error) {
     res.status(500).json({ message: "Server error", error: error.message });
@@ -75,6 +77,13 @@ app.put("/api/products/:id", async (req, res) => {
       .status(500)
       .json({ message: "failed to update product", error: error.message });
   }
+});
+
+// Catch-all route for non-existent endpoints
+app.use((req, res) => {
+  res
+    .status(404)
+    .json({ message: `Route ${req.originalUrl} not found on this server.` });
 });
 
 // 5. Start Server

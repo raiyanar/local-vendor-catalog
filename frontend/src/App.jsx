@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import axios from "axios";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import AdminDashboard from "./AdminDashboard";
@@ -36,14 +36,18 @@ function CustomerPortal() {
   };
 
   // Dual Filtering Engine: Handles both category clicks and text matching
-  const filteredProducts = products.filter((product) => {
-    const matchesCategory =
-      selectedCategory === "All" || product.category === selectedCategory;
-    const matchesSearch = product.title
-      .toLowerCase()
-      .includes(searchQuery.toLowerCase());
-    return matchesCategory && matchesSearch;
-  });
+  const filteredProducts = useMemo(
+    () =>
+      products.filter((product) => {
+        const matchesCategory =
+          selectedCategory === "All" || product.category === selectedCategory;
+        const matchesSearch = product.title
+          .toLowerCase()
+          .includes(searchQuery.toLowerCase());
+        return matchesCategory && matchesSearch;
+      }),
+    [products, selectedCategory, searchQuery],
+  );
 
   return (
     <div className="min-h-screen bg-gray-50 text-gray-800">

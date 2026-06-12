@@ -9,19 +9,22 @@ function AdminDashboard() {
 
   const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
 
-  const fetchProducts = useCallback(async (signal) => {
-    try {
-      const response = await axios.get(`${API_BASE_URL}/api/products`, {
-        signal,
-      });
-      setProducts(response.data);
-    } catch (error) {
-      if (axios.isCancel(error)) return;
-      console.error("Error fetching products:", error);
-    } finally {
-      setLoading(false);
-    }
-  }, []);
+  const fetchProducts = useCallback(
+    async (signal) => {
+      try {
+        const response = await axios.get(`${API_BASE_URL}/api/products`, {
+          signal,
+        });
+        setProducts(response.data);
+      } catch (error) {
+        if (axios.isCancel(error)) return;
+        console.error("Error fetching products:", error);
+      } finally {
+        setLoading(false);
+      }
+    },
+    [API_BASE_URL],
+  );
 
   // Fetch products on load
   useEffect(() => {

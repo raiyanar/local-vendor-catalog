@@ -25,7 +25,7 @@ function CustomerPortal() {
       }
     };
     fetchProducts();
-  }, []);
+  }, [API_BASE_URL]);
 
   const handleWhatsAppClick = (productTitle, price) => {
     const phoneNumber = "+8801757360939";

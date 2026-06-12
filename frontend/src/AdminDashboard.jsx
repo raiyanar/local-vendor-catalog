@@ -255,25 +255,26 @@ function AdminDashboard() {
                       <span className="text-[10px] bg-gray-100 text-gray-500 px-2 py-0.5 rounded font-bold uppercase tracking-wider">
                         {product.category}
                       </span>
+                      <br />
+                      <span className="font-bold text-gray-900 text-sm whitespace-nowrap">
+                        ৳ {product.price}
+                      </span>
                     </div>
                   </div>
 
                   <div className="flex items-center gap-4">
-                    <span className="font-bold text-gray-900 text-sm whitespace-nowrap">
-                      ৳ {product.price}
-                    </span>
                     <div className="flex gap-1">
                       <button
                         onClick={() => handleEditClick(product)}
                         className="text-blue-600 hover:bg-blue-50 px-2 py-1 rounded text-xs font-semibold cursor-pointer transition-colors"
                       >
-                        ✏️ Edit
+                        ✏️
                       </button>
                       <button
                         onClick={() => handleDeleteClick(product._id)}
                         className="text-red-600 hover:bg-red-50 px-2 py-1 rounded text-xs font-semibold cursor-pointer transition-colors"
                       >
-                        🗑️ Delete
+                        🗑️
                       </button>
                     </div>
                   </div>

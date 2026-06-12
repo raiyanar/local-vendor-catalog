@@ -1,7 +1,13 @@
+# Dependencies
 node_modules/
-**/node_modules/
-**/.env
-**/dist/
+
+# Environment variables
+.env
+*.env.local
+
+# Build outputs
+dist/
+build/
+
+# System files
 .DS_Store
-frontend/.eslintcache
-backend/npm-debug.log*
